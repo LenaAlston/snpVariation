@@ -24,7 +24,7 @@
 
   <link rel="stylesheet" href="css/app.css">
   <script src="bower_components/angular/angular.js"></script>
-  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
 </head>
 <body ng-controller="ArticleController">
     
@@ -59,7 +59,15 @@
                 <div class="row">
                     <div id="Home">
                         <h1>GeneVar</h1>
-                        <p></p>
+                        <p>
+                            <form name="fileform"> Select File to Upload:
+                            <br><br>
+                            <input type="text" name="filename" size="40">
+                            <input type="file" name="uploadBox">
+                            <br>
+                            <input type="button" value="Upload" name="get" onClick='showname()'>
+                            </form>
+                        </p>
                     </div>
                     <div id="About">
                         <h1>About</h1>
@@ -80,9 +88,6 @@
         <!-- /#page-content-wrapper -->
     </div>
     <!-- /#wrapper -->
-
-    <!-- jQuery -->
-    <!-- // <script src="js/jquery.js"></script> -->
 
 </body>
 
