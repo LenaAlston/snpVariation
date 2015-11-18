@@ -30,19 +30,15 @@ div.row div:target {display: block}
     z-index: 1000;
     position: fixed;
     left: 250px;
-    width: 0;
+    width: 250px;
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background: #000;
+    background: #000;       /* black */
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-}
-
-#sidebar-wrapper {
-    width: 250px;
 }
 
 #page-content-wrapper {

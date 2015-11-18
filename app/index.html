@@ -24,9 +24,10 @@
 
   <link rel="stylesheet" href="css/app.css">
   <script src="bower_components/angular/angular.js"></script>
-  <script src="js/services.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
 </head>
-<body ng-controller="ArticleController">
+<body ng-controller="ContentController">
     
     <div id="wrapper">
         <!-- Sidebar -->
@@ -52,7 +53,6 @@
             </ul>
         </div>
 
-
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
@@ -62,25 +62,62 @@
                         <p>
                             <form name="fileform"> Select File to Upload:
                             <br><br>
-                            <input type="text" name="filename" size="40">
-                            <input type="file" name="uploadBox">
+                            <input type="text" name="inputbox" size="40">
+                            <!-- <input type="file" name="uploadBox">    SINGLE FILE   -->
+                            <input type="file" id="files" name="files[]" multiple />
                             <br>
-                            <input type="button" value="Upload" name="get" onClick='showname()'>
+                            <!-- showname() confirms receipt of file. remove later -->
+                            <input type="button" value="Upload" name="get" onClick='dostuff()'>  
+                            <output id="list"></output>
+                            <script>
+                                // Check for the various File API support.
+                                if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+                                  alert('This application is not fully supported in this browser. Please try another browser. (Chrome and Safari are recommended.');
+                                } else {
+                                    // need to test more browsers.
+                                    // remove later, that's annoying  
+                                  // alert('This browser supports this application!');
+                                }
+                                  document.getElementById('files').addEventListener('change', verifyFiles, false);
+                  
+                            </script>
                             </form>
                         </p>
                     </div>
                     <div id="About">
                         <h1>About</h1>
-                        <p>GeneVar is a tool that will use regions of interest, or "hotspots," provided as input to identify genomic variations amoung geographically dispersed human populations. This data will be used to make population comparisons at hotspot sites using heat maps and manhattan plots to visualize.
+                        <p>{{ about }}
+                            <br><br>
+                            {{ nhgc }}
+                            <br><br>
+                            {{ cobb }}
+                            <br><br>
+                            {{ advisor }}
+                            <br><br>
+                            {{ devs }}
                         </p>
                     </div>
                     <div id="Guide">
                         <h1>User Guide</h1>
-                        <p></p>
+                        <p>{{ hotspot }}
+                            <br><br>
+                            {{ infile }}
+                            <br><br>
+                            {{ results }}
+                            <br><br>
+                            {{ guide }}
+                        </p>
                     </div>
                     <div id="Resources">
                         <h1>Resources</h1>
-                        <p></p>
+                        <p> {{ ds1 }}
+                            <br><br>
+                            {{ ds2 }}
+                            <br><br>
+                            {{ ds3 }}
+                            <br><br>
+                            {{ map }}
+                        </p>
                     </div>
                 </div>
             </div>
