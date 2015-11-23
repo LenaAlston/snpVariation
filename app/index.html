@@ -62,9 +62,9 @@
                         <p>
                             <form name="fileform"> Select File to Upload:
                             <br><br>
-                            <input type="text" name="inputbox" size="40">
-                            <!-- <input type="file" name="uploadBox">    SINGLE FILE   -->
-                            <input type="file" id="files" name="files[]" multiple />
+                            <input type="text" name="inputBox" size="40">
+                            <input type="file" id="in" name="inFile">    <!-- SINGLE FILE -->  
+                            <!-- <input type="file" id="files" name="files[]" multiple> -->      
                             <br>
                             <!-- showname() confirms receipt of file. remove later -->
                             <input type="button" value="Upload" name="get" onClick='dostuff()'>  
@@ -78,7 +78,8 @@
                                     // remove later, that's annoying  
                                   // alert('This browser supports this application!');
                                 }
-                                  document.getElementById('files').addEventListener('change', verifyFiles, false);
+                                  // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES      
+                                  document.getElementById('in').addEventListener('change', uploadFile, false);
                   
                             </script>
                             </form>
