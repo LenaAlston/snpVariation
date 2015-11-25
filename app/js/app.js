@@ -11,7 +11,6 @@ function dostuff(){
   alert("Stuff will happen");
 }
 
-
 // REMOVE UNUSED FILE READING FUNCTIONS 
 
 function uploadFile(evt) {
@@ -40,9 +39,8 @@ function uploadFile(evt) {
     } 
 }
 
-  // document.getElementById('uploadBox').addEventListener('change', singleFile, false);
 
-// this function allows multiple files to be selected
+// Allows multiple files to be selected
 function verifyFiles(evt) {
     var files = evt.target.files; // FileList object
 
@@ -57,34 +55,34 @@ function verifyFiles(evt) {
 }
 
 
-function handleSelectedFiles(evt) {
-    var files = evt.target.files; // FileList object
+// function handleSelectedFiles(evt) {
+//     var files = evt.target.files; // FileList object
 
-    // Loop through the FileList and render image files as thumbnails.
-    for (var i = 0, f; f = files[i]; i++) {
+//     // Loop through the FileList and render image files as thumbnails.
+//     for (var i = 0, f; f = files[i]; i++) {
 
-      // Only process image files.
-      if (!f.type.match('image.*')) {
-        continue;
-      }
+//       // Only process image files.
+//       if (!f.type.match('image.*')) {
+//         continue;
+//       }
 
-      var reader = new FileReader();
+//       var reader = new FileReader();
 
-      // Closure to capture the file information.
-      reader.onload = (function(theFile) {
-        return function(e) {
-          // Render thumbnail.
-          var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                            '" title="', escape(theFile.name), '"/>'].join('');
-          document.getElementById('list').insertBefore(span, null);
-        };
-      })(f);
+//       // Closure to capture the file information.
+//       reader.onload = (function(theFile) {
+//         return function(e) {
+//           // Render thumbnail.
+//           var span = document.createElement('span');
+//           span.innerHTML = ['<img class="thumb" src="', e.target.result,
+//                             '" title="', escape(theFile.name), '"/>'].join('');
+//           document.getElementById('list').insertBefore(span, null);
+//         };
+//       })(f);
 
-      // Read in the image file as a data URL.
-      // reader.readAsDataURL(f);
-    }
-  }
+//       // Read in the image file as a data URL.
+//       // reader.readAsDataURL(f);
+//     }
+//   }
 
 // function readBlob(opt_startByte, opt_stopByte) {
 
