@@ -1,8 +1,8 @@
-// Make sure to 
-// browserify app.js -o app.bundle.js 
+// Make sure to
+// browserify app.js -o app.bundle.js
 // everytime this changes.
 
-var pg = require('pg').native;
+var pg = require('pg');
 
 document.getElementById('in').addEventListener('change', uploadFile, false);
 
@@ -12,32 +12,32 @@ function showname(){
     document.fileform.inputBox.value = file;
 }
 
-// REMOVE UNUSED FILE READING FUNCTIONS 
+// REMOVE UNUSED FILE READING FUNCTIONS
 
 function uploadFile(evt) {
     // showname();
     //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0]; 
+    var f = evt.target.files[0];
     if (!f) {
         alert("Failed to load file");
     } else if (!f.type.match('text/plain')) {
 		    alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
     } else {
     	var reader = new FileReader();
-      	reader.onload = function(e) { 
+      	reader.onload = function(e) {
 
 	      var contents = e.target.result;
-        // Verifies receipt of file 
-        // Remove later 
-        	alert( "Received File:\n" 
+        // Verifies receipt of file
+        // Remove later
+        	alert( "Received File:\n"
               +"name: " + f.name + "\n"
               +"type: " + f.type + "\n"
               +"size: " + f.size + " bytes\n"
               +"starts with: " + contents.substr(contents.indexOf("\n"))
-        	);  
+        	);
       	}
       	reader.readAsText(f);
-    } 
+    }
 }
 
 
@@ -55,15 +55,15 @@ function verifyFiles(evt) {
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 }
 /************************************************************************************/
-// Query Database 
+// Query Database
 // var pg; // = require('pg');
-      
+
 // define(function (require) {
 //   var pg = require('pg');
 // });
 
-          
-var conString = // anything://username:password@host:port/database 
+
+var conString = '';// anything://username:password@host:port/database
 var client = new pg.Client(conString);
 
 // var client = new pg.Client({
@@ -150,7 +150,7 @@ function go() {
 //     reader.onloadend = function(evt) {
 //       if (evt.target.readyState == FileReader.DONE) { // DONE == 2
 //         document.getElementById('byte_content').textContent = evt.target.result;
-//         document.getElementById('byte_range').textContent = 
+//         document.getElementById('byte_range').textContent =
 //             ['Read bytes: ', start + 1, ' - ', stop + 1,
 //              ' of ', file.size, ' byte file'].join('');
 //       }
@@ -159,7 +159,7 @@ function go() {
 //     var blob = file.slice(start, stop + 1);
 //     reader.readAsBinaryString(blob);
 //   }
-  
+
 //   document.querySelector('.readBytesButtons').addEventListener('click', function(evt) {
 //     if (evt.target.tagName.toLowerCase() == 'button') {
 //       var startByte = evt.target.getAttribute('data-startbyte');

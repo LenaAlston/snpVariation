@@ -24,12 +24,12 @@
   <link rel="stylesheet" href="css/app.css">
   <script src="bower_components/angular/angular.js"></script>
   <script src="http://mbostock.github.com/d3/d3.js"></script>
-  <script src="js/services.js"></script> 
+  <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/app.bundle.js"></script>
 </head>
 <body ng-controller="ContentController">
-    
+
     <div id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
@@ -65,29 +65,29 @@
                     <div id="Home">
                         <h1>GeneVar</h1>
                         <p id="subtitle">Identifying genetic variation between human populations geographically dispersed around the world...</p><br>
-                            <form name="fileform"> 
-                            <strong>1. Select File to Upload:</strong>    
+                            <form name="fileform">
+                            <strong>1. Select File to Upload:</strong>
                             <br><br>
                             <input type="text" name="inputBox" size="40">
-                            <input type="file" id="in" name="inFile">    <!-- SINGLE FILE -->  
-                            <!-- <input type="file" id="files" name="files[]" multiple> -->      
-                            <br> 
+                            <input type="file" id="in" name="inFile">    <!-- SINGLE FILE -->
+                            <!-- <input type="file" id="files" name="files[]" multiple> -->
+                            <br>
                             <script>
                                 // Check for the various File API support.
                                 if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
                                   alert('This application is not fully supported in this browser. Please try another browser. (Chrome and Safari are recommended.');
                                 } else {
                                     // need to test more browsers.
-                                    // remove later, that's annoying  
+                                    // remove later, that's annoying
                                   // alert('This browser supports this application!');
                                 }
-                                  // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES      
+                                  // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES
                                   // document.getElementById('in').addEventListener('change', uploadFile, false);
-                
+
                             </script>
                             </form>
                             <br><br>
-                            <strong>2. Select the Populations You Are Interested In Analyzing:</strong> <br>  
+                            <strong>2. Select the Populations You Are Interested In Analyzing:</strong> <br>
                            <!--  <div ng-controller="checkController"> -->
                           <label ng-repeat="reg in pops">
                               <!-- <br><input type="checkbox" id="{{reg.cont}}" ng-click='checkAll(reg)'> <strong>{{reg.cont}}</strong><br> -->
@@ -100,14 +100,14 @@
                           </label><br>
                           Selected Populations (testing):  {{chkd}}
                           <br> <br>
-                          <input type="button" value="Reset" name="get" ng-click='uncheckAll()'> 
+                          <input type="button" value="Reset" name="get" ng-click='uncheckAll()'>
                           <input type="button" value="Submit" name="get" onClick='go'><br><br>
                           <div id="connected"></div>
                           <div id="queryRes"></div>
                           Query should be ^ above.
 
             <!-- ********************************************* -->
-                    
+
             <!-- ********************************************* -->
 
                          <!-- </div> -->
@@ -150,7 +150,7 @@
                     <div id="Map">
                         <h1>Heat Map (test)</h1>
 
-                        
+
                     </div>
                 </div>
             </div>

@@ -13,12 +13,14 @@
     "http-server": "^0.6.1",
     "tmp": "0.0.23",
     "bower": "^1.3.1",
-    "shelljs": "^0.2.6"
+    "shelljs": "^0.2.6",
+    "nodemon": "~1.8.1"
   },
   "scripts": {
     "postinstall": "bower install",
     "prestart": "npm install",
-    "start": "http-server -a 0.0.0.0 -p 8000",
+    "start": "nodemon index.js",
+    "compile:js": "browserify app/js/app.js -o app/js/app.bundle.js",
     "pretest": "npm install",
     "test": "node node_modules/karma/bin/karma start test/karma.conf.js",
     "test-single-run": "node node_modules/karma/bin/karma start test/karma.conf.js  --single-run",
@@ -45,6 +47,9 @@
     "pgpass": "0.0.3",
     "protractor": "^3.0.0",
     "shelljs": "^0.5.3",
-    "tmp": "0.0.28"
+    "tmp": "0.0.28",
+    "browser-sync": "~2.10.0",
+    "morgan": "~1.6.1",
+    "express": "~4.13.3"
   }
 }
