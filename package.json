@@ -31,7 +31,8 @@
   "dependencies": {
     "angular": "^1.4.8",
     "bower": "^1.6.5",
-    "checklist-model": "^0.8.0",
+    "browserify": "^12.0.1",
+    "d3": "^3.5.10",
     "fs": "0.0.2",
     "http-server": "^0.8.5",
     "jasmine-core": "^2.3.4",
@@ -39,6 +40,9 @@
     "karma-chrome-launcher": "^0.2.1",
     "karma-firefox-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.6",
+    "pg": "^4.4.3",
+    "pg-native": "^1.9.0",
+    "pgpass": "0.0.3",
     "protractor": "^3.0.0",
     "shelljs": "^0.5.3",
     "tmp": "0.0.28"

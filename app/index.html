@@ -12,7 +12,6 @@
 <!-- <a> -->
 <!-- <img> -->
 
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,10 +23,10 @@
 
   <link rel="stylesheet" href="css/app.css">
   <script src="bower_components/angular/angular.js"></script>
-  <script src="js/services.js"></script> 
+  <script src="http://mbostock.github.com/d3/d3.js"></script>
   <script src="js/services.js"></script> 
   <script src="js/controllers.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/app.bundle.js"></script>
 </head>
 <body ng-controller="ContentController">
     
@@ -52,6 +51,10 @@
                 <li>
                     <a href="#Resources">Resources</a>
                 </li>
+                <br><br><br>
+                <li>
+                    <a href="#Map">Heat Map (test)</a>
+                </li>
             </ul>
         </div>
 
@@ -69,8 +72,6 @@
                             <input type="file" id="in" name="inFile">    <!-- SINGLE FILE -->  
                             <!-- <input type="file" id="files" name="files[]" multiple> -->      
                             <br> 
-                            <!-- What's that do .... ? -->
-                            <output id="list"></output>
                             <script>
                                 // Check for the various File API support.
                                 if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
@@ -81,8 +82,8 @@
                                   // alert('This browser supports this application!');
                                 }
                                   // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES      
-                                  document.getElementById('in').addEventListener('change', uploadFile, false);
-                  
+                                  // document.getElementById('in').addEventListener('change', uploadFile, false);
+                
                             </script>
                             </form>
                             <br><br>
@@ -100,7 +101,14 @@
                           Selected Populations (testing):  {{chkd}}
                           <br> <br>
                           <input type="button" value="Reset" name="get" ng-click='uncheckAll()'> 
-                          <input type="button" value="Submit" name="get" onClick='dostuff()'><br><br>
+                          <input type="button" value="Submit" name="get" onClick='go'><br><br>
+                          <div id="connected"></div>
+                          <div id="queryRes"></div>
+                          Query should be ^ above.
+
+            <!-- ********************************************* -->
+                    
+            <!-- ********************************************* -->
 
                          <!-- </div> -->
                     </div>
@@ -138,6 +146,11 @@
                             <br><br>
                             {{ resources.map }}
                         </p>
+                    </div>
+                    <div id="Map">
+                        <h1>Heat Map (test)</h1>
+
+                        
                     </div>
                 </div>
             </div>
