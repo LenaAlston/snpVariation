@@ -4,6 +4,7 @@
 
 var geneVar = angular.module('GeneVar', []);
 var selectedPops = [];
+var queries = [];
 
 geneVar.controller('ContentController', function($scope, $http) {
 	// about.description = "GeneVar is a tool that will use regions of \
@@ -81,11 +82,25 @@ geneVar.controller('ContentController', function($scope, $http) {
    	.success(function(data) {
     	$scope.chkd = []; 
     	selectedPops = []; 
-    	console.log(data);
+      var len = data.length;
+      var dataset = [];
+      for (var i = 0; i < len; i++) {
+        var loop1 = data[i];
+        dataset.push({'population': loop1.population, 'count': loop1.count});
+        // console.log(loop1.population)  
+      }
+      var current_index = data;
+      //dataset.push({current_index.population: current_index.count});
+      axes = selectedPops;
+
+      heatmapChart();
+      // queries = data;
     })
     .error(function(error) {
     	console.log('Error: ' + JSON.stringify(error));
     });
  }
+
+
 });
 
