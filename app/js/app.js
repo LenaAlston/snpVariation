@@ -1,13 +1,7 @@
-// Make sure to
-// browserify app.js -o app.bundle.js
-// everytime this changes.
-
-var pg = require('pg');
-
 document.getElementById('in').addEventListener('change', uploadFile, false);
 
 /* App Module */
-function showname(){
+function showname() {
     var  file = document.fileform.inFile.value;
     document.fileform.inputBox.value = file;
 }
@@ -54,48 +48,6 @@ function verifyFiles(evt) {
     }
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 }
-/************************************************************************************/
-// Query Database
-// var pg; // = require('pg');
-
-// define(function (require) {
-//   var pg = require('pg');
-// });
-
-
-var conString = '';// anything://username:password@host:port/database
-var client = new pg.Client(conString);
-
-// var client = new pg.Client({
-//       user: 'jwxlciuytoiaom',
-//       password: 'V6CyTfP-tjMhYikxHl-tHWPBUk',
-//       database: 'd50gmpmgt0p5b9',
-//       host: 'ec2-54-235-162-144.compute-1.amazonaws.com',
-//       port: 5432
-//     });
-
-
-function go() {
-  alert(selectedPops);
-
-  client.connect(function(err) {
-    if(err) {
-      return console.error('could not connect to postgres', err);
-    }
-    client.query('SELECT * FROM variation', function(err, result) {
-      if(err) {
-        return console.error('error running query', err);
-      }
-    //document.getElementById("conected") = "Database is connected";
-    //console.log(result.rows[0].theTime);
-    // alert(result);
-    client.end();
-    });
-  });
-  //document.getElementById("queryRes") = result;
-}
-
-
 
 /************************************************************************************/
 
