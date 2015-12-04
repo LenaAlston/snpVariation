@@ -5,23 +5,21 @@
 var geneVar = angular.module('GeneVar', []);
 var selectedPops = [];
 
-geneVar.controller('ContentController', function($scope) {
+geneVar.controller('ContentController', function($scope, $http) {
 	// about.description = "GeneVar is a tool that will use regions of \
 	// interest or hotspots provided as input to identify genomic \
 	// variations amoung geographically dispersed human populations. \
 	// This data will be used to make population comparisons at hotspot \
 	// sites using heat maps and manhattan plots to visualize.";
 	
-	$scope.about = {'description':"GeneVar is a tool that will use regions of interest or hotspots provided as input to identify genomic variations amoung geographically dispersed human populations. This data will be used to make population comparisons at hotspot sites using heat maps and manhattan plots to visualize.", 
-					'nhgc': 'National Human Genome Center', 
-					'cobb': 'Cobb Lab',
-					'advisor': 'Dr. Jackson',
-					'devs': 'Salena'}; 
+	$scope.about = {'p1':"GeneVar is a tool that will use regions of interest or hotspots provided as input to identify genomic variations amoung geographically dispersed human populations. This data will be used to make population comparisons at hotspot sites using heat maps and manhattan plots to visualize.", 
+					'p2': 'Dr. Latifa Jackson, a postdoctoral fellow with National Human Genome Center at Howard University, has found an interest in, and is therefore conducting research on, how clusters of genes in genomic regions on a chromosome may predict disease severity in different dispersed human populations. This research has led Dr. Jackson to build a tool that identifies clusters of single nucleotide polymorphisms (SNPs) on the genome, called hotspots, and reveals significant variations in the SNPs between populations. In 2014, Dr. Jackson worked with Aaron Maleaux, a Howard University undergraduate Computer Science student, to expand the cluster identifying portion of the tool to use a more robust and commonly used programming language and to provide a user interface for the tool to be easily used by colleagues.', 
+				    'p3': 'Through the valuable information Dr. Jackson has learned from the data acquired by Aaron’s project, the next step, and our project, is to compare the genomic regions of populations. The project will identify population variation in specific genomic regions, as identified by the hotspots acquired from Maleaux’s program to make population and individual variant site comparison. Also, Dr. Jackson’s version of the program is on proprietary software, and therefore usability and accessibility of the software is reduced. The new program will provide a more accessible and user friendly data exploration environment for our users at the National Human Genome Center and the Montague Cobb Lab.'}; 
 
-	$scope.usrGuide = {'hotspot':'Description of Aaron\'s Hotspot Identifier program', 
-						'infile':'how to customize your input',
-						'results':'reading, interpretting, saving your output results',
-						'guide': 'link to how-to guide here'};
+	$scope.usrGuide = {'hotspot':'Navigate GeneVar with ease!', 
+						'infile':'Identity your area of interest: Upload the Hotspot File with the start location, stop location, and chromosome number of the area of the genome that peaks your interest most.',
+						'results':'Customize your Input: Adjust the areas of the genome that you would care to receive analysis on by adding or removing files from the Hotspot File. Adjust the populations that are most relevant to your interests or projects by checking the continent order boxes next to your populations of interest.',
+						'guide': 'Reading, interpreting, saving your output result: After your Hotspots are entered and your desired populations are selected, you will be able to view your results in a color coded Heatmap. The lighter the color on your heatmap describes a greater degree of difference between population SNP alleles. The heatmap is downloadable as a PDF with an easy click of the ‘Download’ button.'};
 
 
 	$scope.resources = {'ds1': '1000 Genome Description',
@@ -77,5 +75,17 @@ geneVar.controller('ContentController', function($scope) {
  // 	selectedPops = $scope.chkd;
  //  	// alert($scope.chkd);
  //  };
+
+ $scope.submit = function(snpIDS) {
+    $http.post('/submit', $scope.chkd)
+   	.success(function(data) {
+    	$scope.chkd = []; 
+    	selectedPops = []; 
+    	console.log(data);
+    })
+    .error(function(error) {
+    	console.log('Error: ' + JSON.stringify(error));
+    });
+ }
 });
 
