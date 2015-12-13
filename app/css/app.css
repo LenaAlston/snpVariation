@@ -158,11 +158,3 @@ text.mono {
 #map {
     display:block;
 }
-      
-text.axis-workweek {
-    fill: #000;
-}
-
-text.axis-worktime {
-    fill: #000;
-}

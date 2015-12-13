@@ -57,12 +57,12 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
           height = 330 - margin.top - margin.bottom,
           gridSize = Math.floor(width / (axes.length*2)),
           legendElementWidth = gridSize,
-          buckets = 9,
-          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]; // alternatively colorbrewer.YlGnBu[9]
+          // change color?  (colorbrewer.YlGnBu[9])
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]; 
 
       var svg = d3.select("#map").append("svg")
           .attr("width", gridSize * 2 * axes.length)
-          .attr("height", gridSize * 2 * axes.length) // 1500) //height + margin.top + margin.bottom)
+          .attr("height", gridSize * 2 * axes.length)
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -74,7 +74,7 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
             .attr("y", function (d, i) { return i * gridSize; })
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-            .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
+            .attr("class", "xLabel mono axis");
 
       var yLabels = svg.selectAll(".yLabel")
           .data(axes)
@@ -84,7 +84,7 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
             .attr("y", 0)
             .style("text-anchor", "middle")
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function (d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+            .attr("class", "yLabel mono axis");
 
       var heatmapChart = function(tsvFile) {
         d3.tsv(tsvFile,
@@ -110,6 +110,7 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
           cards.enter().append("rect")
               .attr("x", function(d) { 
                 var pos = axes.indexOf(d.xpopulation);
+                // testing.
                 if (pos == -1) {
                   console.log("xpop not found: ", d.xpopulation, d.ypopulation, d.pval);
                 }
