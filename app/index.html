@@ -23,7 +23,7 @@
 
       <link rel="stylesheet" href="css/app.css">
       <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/d3/d3.min.js"></script>
+     <script src="bower_components/d3/d3.min.js"></script>
     </head>
     <body ng-controller="ContentController">
 
@@ -73,11 +73,9 @@
                                     // Check for the various File API support.
                                     if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
                                       alert('This application is not fully supported in this browser. Please try another browser. (Chrome and Safari are recommended.');
-                                    } else {
+                                    } //else {
                                         // need to test more browsers.
-                                        // remove later, that's annoying
-                                      // alert('This browser supports this application!');
-                                    }
+                                   // }
                                       // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES
                                       // document.getElementById('in').addEventListener('change', uploadFile, false);
 
@@ -99,14 +97,9 @@
                               <br> <br>
                               <input type="button" value="Reset" name="get" ng-click='uncheckAll()'>
                               <input type="button" value="Submit" name="get" ng-click='submit()'><br><br>
-                              <div id="connected"></div>
-                              <div id="queryRes"></div>
 
                 <!-- ********************************************* -->
 
-                <!-- ********************************************* -->
-
-                             <!-- </div> -->
                         </div>
                         <div id="About">
                             <h1>About</h1>
@@ -142,35 +135,8 @@
                             </p>
                         </div>
                         <div id="Map">
-                            <h1>Heat Map (test)</h1>
-                <style>
-      rect.bordered {
-        stroke: #E6E6E6;
-        stroke-width:2px;   
-      }
-
-      text.mono {
-        font-size: 9pt;
-        font-family: Consolas, courier;
-        fill: #aaa;
-      }
-      #chart {
-        display:block;
-      }
-      text.axis-workweek {
-        fill: #000;
-      }
-
-      text.axis-worktime {
-        fill: #000;
-      }
-    </style>
-                            <div id="chart"></div>
-    <div id="dataset-picker">
-    </div>
-    <script type="text/javascript">
-    </script>
-
+                            <h1>Heat Map (dummy data)</h1>
+                            <div id="map"></div>
                         </div>
                     </div>
                 </div>

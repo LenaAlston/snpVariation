@@ -93,6 +93,7 @@ geneVar.controller('ContentController', function($scope, $http) {
       //dataset.push({current_index.population: current_index.count});
       axes = selectedPops;
 
+      console.log(JSON.stringify(dataset));
       heatmapChart();
       // queries = data;
     })

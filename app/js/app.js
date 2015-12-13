@@ -49,32 +49,24 @@ function verifyFiles(evt) {
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 }
 
-/************************************************************************************/
-var margin = { top: 50, right: 0, bottom: 100, left: 30 },
+/******************************* Heatmap *****************************************************/
+
+axes = ["Maya", "Finnish", "American", "Yoruba", "Colombian", "Guatemalan"];
+var margin = { top: 50, right: 20, bottom: 0, left: 100 },
           width = 960 - margin.left - margin.right,
-          height = 430 - margin.top - margin.bottom,
-          gridSize = Math.floor(width / 24),
-          legendElementWidth = gridSize*2,
+          height = 330 - margin.top - margin.bottom,
+          gridSize = Math.floor(width / (axes.length*2)),
+          legendElementWidth = gridSize,
           buckets = 9,
-          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
-          axes = [];
-          // selectedPops;
-          //days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-          //times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
-          // dataset =[];
-          // for (var i = 0; i < queries.length; i++) {
-          //   dataset.push({queries[i].population : queries[i].count});
-          // }
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]; // alternatively colorbrewer.YlGnBu[9]
 
-          // dataset = ["data.tsv", "data2.tsv"];
-
-      var svg = d3.select("#chart").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+      var svg = d3.select("#map").append("svg")
+          .attr("width", gridSize * 2 * axes.length)
+          .attr("height", gridSize * 2 * axes.length) // 1500) //height + margin.top + margin.bottom)
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      var rowLabel = svg.selectAll(".rowLabel")
+      var xLabels = svg.selectAll(".xLabel")
           .data(axes)
           .enter().append("text")
             .text(function (d) { return d; })
@@ -82,9 +74,9 @@ var margin = { top: 50, right: 0, bottom: 100, left: 30 },
             .attr("y", function (d, i) { return i * gridSize; })
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-            .attr("class", function (d, i) { return ("Populations"); });
+            .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
 
-      var colLabel = svg.selectAll(".colLabel")
+      var yLabels = svg.selectAll(".yLabel")
           .data(axes)
           .enter().append("text")
             .text(function(d) { return d; })
@@ -92,31 +84,42 @@ var margin = { top: 50, right: 0, bottom: 100, left: 30 },
             .attr("y", 0)
             .style("text-anchor", "middle")
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function(d, i) { return ("Populations"); });
+            .attr("class", function (d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
 
-      var heatmapChart = function() {
-        d3.tsv('/js/hello.tsv',
+      var heatmapChart = function(tsvFile) {
+        d3.tsv(tsvFile,
         function(d) {
-          console.log(+d.population);
           return {
-            population: +d.population,
-            count: +d.count
+            xpopulation: d.xpopulation,
+            ypopulation: d.ypopulation,
+            pval: +d.pval,
           };
+          
         },
         function(error, data) {
-          console.log("HELLO" + data);
           var colorScale = d3.scale.quantile()
-              .domain([0, buckets - 1, d3.max(data, function (d) { return d.hour; })])
+              .domain([.1, d3.max(data, function (d) { return d.pval; })])
               .range(colors);
 
-          var cards = svg.selectAll(".hour")
-              .data(data, function(d) {return d.population;});
+          var cards = svg.selectAll(".xpopulation")
+              .data(data, function(d) {return d.xpopulation+':'+d.ypopulation;});
 
           cards.append("title");
 
+          
           cards.enter().append("rect")
-              .attr("x", function(d) { return (d.population - 1) * gridSize; })
-              .attr("y", function(d) { return (d.population - 1) * gridSize; })
+              .attr("x", function(d) { 
+                var pos = axes.indexOf(d.xpopulation);
+                if (pos == -1) {
+                  console.log("xpop not found: ", d.xpopulation, d.ypopulation, d.pval);
+                }
+                return pos * gridSize; })
+              .attr("y", function(d) { 
+                var pos = axes.indexOf(d.ypopulation);
+                if (pos == -1) {
+                  console.log("ypop not found: ", d.ypopulation);
+                }
+                return pos * gridSize; })
               .attr("rx", 4)
               .attr("ry", 4)
               .attr("class", "hour bordered")
@@ -125,9 +128,9 @@ var margin = { top: 50, right: 0, bottom: 100, left: 30 },
               .style("fill", colors[0]);
 
           cards.transition().duration(1000)
-              .style("fill", function(d) { return colorScale(d.count); });
+              .style("fill", function(d) { return colorScale(d.pval); });
 
-          cards.select("title").text(function(d) { return d.count; });
+          cards.select("title").text(function(d) { return d.pval; });
           
           cards.exit().remove();
 
@@ -139,35 +142,25 @@ var margin = { top: 50, right: 0, bottom: 100, left: 30 },
 
           legend.append("rect")
             .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height)
+            .attr("y", height+ (3*gridSize))
             .attr("width", legendElementWidth)
             .attr("height", gridSize / 2)
             .style("fill", function(d, i) { return colors[i]; });
 
           legend.append("text")
             .attr("class", "mono")
-            .text(function(d) { return "≥ " + Math.round(d); })
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height + gridSize);
+            .text(function(d) { return "≥ " + Math.round(d*10)/10; })
+            .attr("x", function(d, i) { return (legendElementWidth * i)+20; })
+            .attr("y", height + (4*gridSize));
 
           legend.exit().remove();
 
         });  
       };
 
-    
+      heatmapChart("test.tsv");
       
-      // var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-      //   .data(datasets);
 
-      // datasetpicker.enter()
-      //   .append("input")
-      //   .attr("value", function(d){ return "Dataset " + d })
-      //   .attr("type", "button")
-      //   .attr("class", "dataset-button")
-      //   .on("click", function(d) {
-      //     heatmapChart(d);
-      //   });
 //*************************************************************************************
 
 
