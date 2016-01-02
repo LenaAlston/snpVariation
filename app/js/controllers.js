@@ -30,22 +30,22 @@ geneVar.controller('ContentController', function($scope, $http) {
 
 	$scope.chkd = [];
 
-	$scope.African = ['Yoruba', 'BantuSouthAfrica', 'BantuKenya'];
-	$scope.Antarctican = [];
-	$scope.Asian = ['Han', 'She', 'Japanese', 'JPT+CHB'];
-	$scope.Australian = [];
-	$scope.European = ['Italian', 'Russian', 'French'];
-	$scope.nAmerican = ['Maya'];
-	$scope.sAmerican = ['Colombian',];
+	$scope.African = ['Yoruba', 'BiakaPygmy', 'ASW', 'Mandenka', 'Mbuti pygmy', 'MKK', 'Mozabite', 'San', 'BantuSouthAfrica', 'BantuKenya'];
+	$scope.csAsian = ['Balochi', 'Brahui', 'GIH','Burusho', 'Hazara', 'Kalash', 'Makrani', 'Sindhi', 'Uygur'];
+	$scope.eAsian = ['CEU', 'CHB', 'CHD', 'Dai', 'Han', 'She', 'Japanese', 'JPT+CHB', 'Daur', 'Hezhen', 'Lahu', 'Miao', 'Mongola', 'Naxi', 'Oroqen', 'Tu', 'Tujia', 'Xibo', 'Yakut', 'Yi'];
+	$scope.wAsian = ['Bedouin', 'Druze', 'Palestinian'];
+	$scope.European = ['Italian', 'TSI', 'Russian', 'French', 'Adygei', 'Basque', 'North Italian', 'Orcadian', 'Tuscan', 'Sardinian'];
+	$scope.naAmerican = ['Maya', 'MEX', 'Colombian', 'Karitiana', 'Pima', 'Surui'];
+	$scope.Oceania = ['Melanesian', 'Papuan'];
 	
 	$scope.pops = [
     {cont: 'Africa', pop: $scope.African},
-    {cont: 'Antarctican', pop: $scope.Australian},
-    {cont: 'Asia', pop: $scope.Asian},
-    {cont: 'Australia', pop: $scope.Australian},
+    {cont: 'Central & South Asia', pop: $scope.csAsian},
+    {cont: 'Eastern Asia', pop: $scope.eAsian},
     {cont: 'Europe', pop: $scope.European},
-    {cont: 'North America', pop: $scope.nAmerican},
-    {cont: 'South America', pop: $scope.sAmerican}
+    {cont: 'Oceania', pop: $scope.Oceania},
+    {cont: 'Native America', pop: $scope.naAmerican},
+    {cont: 'Western Asia', pop: $scope.wAsian}
   ];
 	// doesn't work yet
  	$scope.checkAll = function(cont) {
