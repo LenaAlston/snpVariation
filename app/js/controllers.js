@@ -64,17 +64,36 @@ geneVar.controller('ContentController', function($scope, $http) {
 
 // *** allows duplicates, does not unclick. 
 // fix that. 
-  $scope.check = function(name) {
-  	 // alert(name);
-  	document.getElementById(name).checked = true; 
-  	$scope.chkd.push(name);
-  	selectedPops = $scope.chkd;
+ //  $scope.check = function(name) {
+ //  	 // alert(name);
+ //  	document.getElementById(name).checked = true; 
+ //  	$scope.chkd.push(name);
+ //  	selectedPops = $scope.chkd;
+ //  };
+
+ // // $scope.dostuff = function() {
+ // // 	selectedPops = $scope.chkd;
+ // //  	// alert($scope.chkd);
+ // //  };
+
+   $scope.check = function(name) {
+   // alert(name);
+  //   alert("value: ", document.getElementById(name).checked);
+     if (document.getElementById(name).checked == true) {
+      $scope.chkd.push(name);
+    } else {
+      // document.getElementById(name).checked = false;
+      var i = $scope.chkd.indexOf(name);
+      $scope.chkd.splice(i, 1);
+    }
+    selectedPops = $scope.chkd;
+   };
+
+ $scope.dostuff = function() {
+  selectedPops = $scope.chkd;
+    // alert($scope.chkd);
   };
 
- // $scope.dostuff = function() {
- // 	selectedPops = $scope.chkd;
- //  	// alert($scope.chkd);
- //  };
 
  $scope.submit = function(snpIDS) {
     $http.post('/submit', $scope.chkd)

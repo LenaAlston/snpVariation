@@ -83,13 +83,19 @@
                                 <strong>2. Select the Populations You Are Interested In Analyzing:</strong> <br>
                                <!--  <div ng-controller="checkController"> -->
                               <label ng-repeat="reg in pops">
-                                  <!-- <br><input type="checkbox" id="{{reg.cont}}" ng-click='checkAll(reg)'> <strong>{{reg.cont}}</strong><br> -->
+                                  <!-- Creates a 'checkall' box for each population  <br><input type="checkbox" id="{{reg.cont}}" ng-click='checkAll(reg)'> <strong>{{reg.cont}}</strong><br> -->
                                     <br><p class="super-check">
                                         <strong>{{reg.cont}}</strong>
                                     </p>
                                     <label ng-repeat="c in reg.pop">
                                         <input type="checkbox" class="sub-check" id="{{c}}" ng-click='check(c)'> {{c}}<br>
-                                    </label>
+                                   
+                                     <!--  new,   <label ng-repeat="c in reg.pop">
+                                    <!    <input type="checkbox" class="sub-check" id="{{c}}" ng-click='check(c)'> -
+                                    <input type="checkbox" checklist-model="reg.pop"  checklist-value="pop" id="{{c}}" ng-click="check(c)">
+                               
+                                    {{c}}<br>-->
+                                     </label>
                               </label><br>
                               Selected Populations (testing):  {{chkd}}
                               <br> <br>
