@@ -1,4 +1,4 @@
-document.getElementById('in').addEventListener('change', uploadFile, false);
+document.getElementById('in1').addEventListener('change', uploadFile, false);
 
 /* App Module */
 function showname() {
@@ -14,40 +14,39 @@ function uploadFile(evt) {
     var f = evt.target.files[0];
     if (!f) {
         alert("Failed to load file");
-    } else if (!f.type.match('text/plain')) {
-		    alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
+    } else if (!f.type.match('text.*/')) {
+        alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
     } else {
-    	var reader = new FileReader();
-      	reader.onload = function(e) {
+      var reader = new FileReader();
+        reader.onload = function(e) {
 
-	      var contents = e.target.result;
+        var contents = e.target.result;
         // Verifies receipt of file
         // Remove later
-        	alert( "Received File:\n"
+          alert( "Received File:\n"
               +"name: " + f.name + "\n"
               +"type: " + f.type + "\n"
               +"size: " + f.size + " bytes\n"
-              +"starts with: " + contents.substr(contents.indexOf("\n"))
-        	);
-      	}
-      	reader.readAsText(f);
+          );
+        }
+        reader.readAsText(f);
     }
 }
+//*****************************************
 
+// // Allows multiple files to be selected
+// function verifyFiles(evt) {
+//     var files = evt.target.files; // FileList object
 
-// Allows multiple files to be selected
-function verifyFiles(evt) {
-    var files = evt.target.files; // FileList object
-
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-    	output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-    	f.size, ' bytes, last modified: ',
-    	f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a','</li>');
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
+//     // files is a FileList of File objects. List some properties.
+//     var output = [];
+//     for (var i = 0, f; f = files[i]; i++) {
+//     	output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+//     	f.size, ' bytes, last modified: ',
+//     	f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a','</li>');
+//     }
+//     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+// }
 
 /******************************* Heatmap *****************************************************/
 
@@ -196,7 +195,7 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
 
 // function readBlob(opt_startByte, opt_stopByte) {
 
-//     var files = document.getElementById('files').files;
+//     var files = document.getElementById('in1').in1;
 //     if (!files.length) {
 //       alert('Please select a file!');
 //       return;
@@ -226,7 +225,7 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
 //     if (evt.target.tagName.toLowerCase() == 'button') {
 //       var startByte = evt.target.getAttribute('data-startbyte');
 //       var endByte = evt.target.getAttribute('data-endbyte');
-//       readBlob(startByte, endByte);
+//      // readBlob(startByte, endByte);
 //     }
 //   }, false);
 
