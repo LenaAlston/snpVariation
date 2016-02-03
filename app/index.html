@@ -58,19 +58,38 @@
                         <div id="Home">
                             <h1>GeneVar</h1>
                             <p id="subtitle">Identifying genetic variation between human populations geographically dispersed around the world...</p><br>
+   
                                 <form name="fileform">
-                                <strong>1. Select File to Upload:</strong>
-                                <br><br>
-                                <input type="text" name="inputBox" size="40">
-                                <input type="file" id="in" name="inFile">    <!-- SINGLE FILE -->
+                                <strong>1. Select Hotspot File to Upload </strong>
+                                <br>
+                                <input type="file" id="in1" name="inFile" onchange="openFile(event)">    
                                 <br>
                                 <script>
                                     // Check for the various File API support.
                                     if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
                                       alert('This application is not fully supported in this browser. Please try another browser. (Chrome and Safari are recommended.');
                                     }
-                                      document.getElementById('in').addEventListener('change', uploadFile, false);       // SINGLE FILE
+                                      // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES
+                                      // document.getElementById('in').addEventListener('change', uploadFile, false);
+                                </script>
+                                </form>
+                                <br>
 
+                                <script>
+                                    var openFile = function(event) {
+                                    var input = event.target;
+                                        var reader = new FileReader();
+                                        reader.onload = function(){
+                                          var text = reader.result;         //text = File contents  
+                                          var b = text.split("\n");         //split File by rows
+                                          var row = [];                     //create arrays for rows
+                                          for(line = 0; line < b.length; line++){   //Loop through all the rows
+                                            var chrom = b[line].split(",", 3);    //Get first 3 elements [Chrom#, Start, Stop] 
+                                            row.push(chrom);                //Push Chrom info into row array
+                                       } console.log(row)
+                                          };
+                                        reader.readAsText(input.files[0]);
+                                      };
                                 </script>
                                 </form>
                                 <br><br>
@@ -91,8 +110,7 @@
                         </div>
                         <div id="About">
                             <h1>About</h1>
-                            <p>{{ about.description }}
-                                <br><br>
+                            <p> 
                                 {{ about.p1 }}
                                 <br><br>
                                 {{ about.p2 }}
@@ -141,4 +159,36 @@
         <script src="js/app.js"></script>
     </footer>
 </html>
-
+<!--************** This prints out each column in separate arrays *************************
+<script>
+    //new = just added
+    //*commented out with the new additions
+    //**already commented out
+    var openFile = function(event) {
+    var input = event.target;
+    
+        var reader = new FileReader();
+       var chrNum = [];
+       var start = [];
+       var stop = [];
+      
+        reader.onload = function()
+        {
+          var text = reader.result;
+          var lines = text.split("\n");
+          lines.map(function(item){
+            var tabs = item.split('\t');
+            console.log(tabs[0], tabs[1], tabs[2]);
+            chrNum.push(tabs[0]);
+            start.push(tabs[1]);
+            stop.push(tabs[2]);
+             });
+             //for(var i = 0; i < text.length; i++){
+             //console.log(chrNum[i], start[i], stop[i]);
+            //}
+          
+        }
+        reader.readAsText(input.files[0]);
+};
+</script>
+// </script> *****************************************************-->
