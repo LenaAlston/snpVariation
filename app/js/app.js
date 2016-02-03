@@ -9,26 +9,16 @@ function showname() {
 // REMOVE UNUSED FILE READING FUNCTIONS
 
 function uploadFile(evt) {
-    // showname();
     //Retrieve the first (and only!) File from the FileList object
     var f = evt.target.files[0];
     if (!f) {
         alert("Failed to load file");
     } else if (!f.type.match('text/plain')) {
-		    alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
+		    alert(f.name + " is type " + f.type +".\nThis is not an accepted file type.\nPlease select a text file (.txt).");
     } else {
     	var reader = new FileReader();
       	reader.onload = function(e) {
-
 	      var contents = e.target.result;
-        // Verifies receipt of file
-        // Remove later
-        	alert( "Received File:\n"
-              +"name: " + f.name + "\n"
-              +"type: " + f.type + "\n"
-              +"size: " + f.size + " bytes\n"
-              +"starts with: " + contents.substr(contents.indexOf("\n"))
-        	);
       	}
       	reader.readAsText(f);
     }
@@ -51,8 +41,8 @@ function verifyFiles(evt) {
 
 /******************************* Heatmap *****************************************************/
 
-axes = ["Maya", "Finnish", "American", "Yoruba", "Colombian", "Guatemalan"];
-var margin = { top: 50, right: 20, bottom: 0, left: 100 },
+var heatmapChart = function(axes, data) {
+      var margin = { top: 50, right: 20, bottom: 0, left: 100 },
           width = 960 - margin.left - margin.right,
           height = 330 - margin.top - margin.bottom,
           gridSize = Math.floor(width / (axes.length*2)),
@@ -86,41 +76,31 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
             .attr("class", "yLabel mono axis");
 
-      var heatmapChart = function(tsvFile) {
-        d3.tsv(tsvFile,
-        function(d) {
-          return {
-            xpopulation: d.xpopulation,
-            ypopulation: d.ypopulation,
-            pval: +d.pval,
-          };
-          
-        },
-        function(error, data) {
+
           var colorScale = d3.scale.quantile()
-              .domain([.1, d3.max(data, function (d) { return d.pval; })])
+              .domain([.1, 1])
               .range(colors);
-
           var cards = svg.selectAll(".xpopulation")
-              .data(data, function(d) {return d.xpopulation+':'+d.ypopulation;});
-
+              .data(data, function(d) {
+                return d.xpopulation+':'+d.ypopulation;});
           cards.append("title");
 
-          
           cards.enter().append("rect")
               .attr("x", function(d) { 
                 var pos = axes.indexOf(d.xpopulation);
-                // testing.
+                // testing. 
                 if (pos == -1) {
-                  console.log("xpop not found: ", d.xpopulation, d.ypopulation, d.pval);
+                  console.log("population not found: ", d.xpopulation);
                 }
                 return pos * gridSize; })
+
               .attr("y", function(d) { 
                 var pos = axes.indexOf(d.ypopulation);
                 if (pos == -1) {
-                  console.log("ypop not found: ", d.ypopulation);
+                  console.log("population not found: ", d.ypopulation);
                 }
                 return pos * gridSize; })
+
               .attr("rx", 4)
               .attr("ry", 4)
               .attr("class", "hour bordered")
@@ -129,9 +109,9 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
               .style("fill", colors[0]);
 
           cards.transition().duration(1000)
-              .style("fill", function(d) { return colorScale(d.pval); });
+              .style("fill", function(d) { return colorScale(d.ks); });
 
-          cards.select("title").text(function(d) { return d.pval; });
+          cards.select("title").text(function(d) { return d.ks; });
           
           cards.exit().remove();
 
@@ -153,80 +133,5 @@ var margin = { top: 50, right: 20, bottom: 0, left: 100 },
             .text(function(d) { return "≥ " + Math.round(d*10)/10; })
             .attr("x", function(d, i) { return (legendElementWidth * i)+20; })
             .attr("y", height + (4*gridSize));
-
           legend.exit().remove();
-
-        });  
       };
-
-      heatmapChart("test.tsv");
-      
-
-//*************************************************************************************
-
-
-// function handleSelectedFiles(evt) {
-//     var files = evt.target.files; // FileList object
-
-//     // Loop through the FileList and render image files as thumbnails.
-//     for (var i = 0, f; f = files[i]; i++) {
-
-//       // Only process image files.
-//       if (!f.type.match('image.*')) {
-//         continue;
-//       }
-
-//       var reader = new FileReader();
-
-//       // Closure to capture the file information.
-//       reader.onload = (function(theFile) {
-//         return function(e) {
-//           // Render thumbnail.
-//           var span = document.createElement('span');
-//           span.innerHTML = ['<img class="thumb" src="', e.target.result,
-//                             '" title="', escape(theFile.name), '"/>'].join('');
-//           document.getElementById('list').insertBefore(span, null);
-//         };
-//       })(f);
-
-//       // Read in the image file as a data URL.
-//       // reader.readAsDataURL(f);
-//     }
-//   }
-
-// function readBlob(opt_startByte, opt_stopByte) {
-
-//     var files = document.getElementById('files').files;
-//     if (!files.length) {
-//       alert('Please select a file!');
-//       return;
-//     }
-
-//     var file = files[0];
-//     var start = parseInt(opt_startByte) || 0;
-//     var stop = parseInt(opt_stopByte) || file.size - 1;
-
-//     var reader = new FileReader();
-
-//     // If we use onloadend, we need to check the readyState.
-//     reader.onloadend = function(evt) {
-//       if (evt.target.readyState == FileReader.DONE) { // DONE == 2
-//         document.getElementById('byte_content').textContent = evt.target.result;
-//         document.getElementById('byte_range').textContent =
-//             ['Read bytes: ', start + 1, ' - ', stop + 1,
-//              ' of ', file.size, ' byte file'].join('');
-//       }
-//     };
-
-//     var blob = file.slice(start, stop + 1);
-//     reader.readAsBinaryString(blob);
-//   }
-
-//   document.querySelector('.readBytesButtons').addEventListener('click', function(evt) {
-//     if (evt.target.tagName.toLowerCase() == 'button') {
-//       var startByte = evt.target.getAttribute('data-startbyte');
-//       var endByte = evt.target.getAttribute('data-endbyte');
-//       readBlob(startByte, endByte);
-//     }
-//   }, false);
-

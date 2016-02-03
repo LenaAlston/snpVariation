@@ -21,12 +21,13 @@ app.use(express.static(__dirname + '/app/'));
 
 // attaches data to url 
 app.post('/submit', function(req, res) {
-    var qString = 'SELECT * FROM individual WHERE ';
+    var qString = 'SELECT * FROM frequency WHERE ';
     var queryArr = req.body;
-    var results = [];
-    console.log(req.body);
+    var dataList = [];
+    var results = {};
 
     if (queryArr.length > 0) {
+        previous = queryArr[0];
          client.connect(function(err) {
              if (err) {
                  return console.error('unable to connect to postgres', err);
@@ -38,24 +39,28 @@ app.post('/submit', function(req, res) {
                  }
              }
 
-             // console.log("\n\n\n\n\nSTUFF STUFF"+qString);
+             qString += ' order by population, rs'
 
              client.query(qString, function(err, result) {
                  if (err) {
                      return console.error('error running query', err);
                  }
-                 
-                
-                 // console.log('\n\n\n\n\n\n'+JSON.stringify(result)+'\n\n\n\n\n\n');
-                 // res.setHeader('Content-Type', 'text/plain');
-                 // res.write(result);
-                 // res.end();
-                 // client.end();
+
              })
                 .on('row', function(row) {
-                    results.push(row);
+                    pop = row.population;
+                    if (pop != previous){
+                        results[previous] = dataList;
+                        dataList = [];
+
+                    } else {
+                        dataList.push(row.sum);
+                    }
+                    previous = pop; 
                 })
+
                 .on('end', function() {
+                    results[previous] = dataList;
                     client.end();
                     return res.json(results);
                 });

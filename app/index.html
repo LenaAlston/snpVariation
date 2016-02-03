@@ -18,12 +18,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-
         <title>GeneVar</title>
-
-      <link rel="stylesheet" href="css/app.css">
-      <script src="bower_components/angular/angular.js"></script>
-     <script src="bower_components/d3/d3.min.js"></script>
+        <link rel="stylesheet" href="css/app.css">
     </head>
     <body ng-controller="ContentController">
 
@@ -50,7 +46,7 @@
                     </li>
                     <br><br><br>
                     <li>
-                        <a href="#Map">Heat Map (test)</a>
+                        <a href="#Map">Heat Map</a>
                     </li>
                 </ul>
             </div>
@@ -67,43 +63,31 @@
                                 <br><br>
                                 <input type="text" name="inputBox" size="40">
                                 <input type="file" id="in" name="inFile">    <!-- SINGLE FILE -->
-                                <!-- <input type="file" id="files" name="files[]" multiple> -->
                                 <br>
                                 <script>
                                     // Check for the various File API support.
                                     if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
                                       alert('This application is not fully supported in this browser. Please try another browser. (Chrome and Safari are recommended.');
                                     }
-                                      // document.getElementById('files').addEventListener('change', verifyFiles, false);  // MULTIPLE FILES
-                                      // document.getElementById('in').addEventListener('change', uploadFile, false);
+                                      document.getElementById('in').addEventListener('change', uploadFile, false);       // SINGLE FILE
 
                                 </script>
                                 </form>
                                 <br><br>
                                 <strong>2. Select the Populations You Are Interested In Analyzing:</strong> <br>
-                               <!--  <div ng-controller="checkController"> -->
+
                               <label ng-repeat="reg in pops">
-                                  <!-- Creates a 'checkall' box for each population  <br><input type="checkbox" id="{{reg.cont}}" ng-click='checkAll(reg)'> <strong>{{reg.cont}}</strong><br> -->
                                     <br><p class="super-check">
                                         <strong>{{reg.cont}}</strong>
                                     </p>
                                     <label ng-repeat="c in reg.pop">
                                         <input type="checkbox" class="sub-check" id="{{c}}" ng-click='check(c)'> {{c}}<br>
-                                   
-                                     <!--  new,   <label ng-repeat="c in reg.pop">
-                                    <!    <input type="checkbox" class="sub-check" id="{{c}}" ng-click='check(c)'> -
-                                    <input type="checkbox" checklist-model="reg.pop"  checklist-value="pop" id="{{c}}" ng-click="check(c)">
-                               
-                                    {{c}}<br>-->
                                      </label>
                               </label><br>
                               Selected Populations (testing):  {{chkd}}
                               <br> <br>
                               <input type="button" value="Reset" name="get" ng-click='uncheckAll()'>
                               <input type="button" value="Submit" name="get" ng-click='submit()'><br><br>
-
-                <!-- ********************************************* -->
-
                         </div>
                         <div id="About">
                             <h1>About</h1>
@@ -139,7 +123,7 @@
                             </p>
                         </div>
                         <div id="Map">
-                            <h1>Heat Map (dummy data)</h1>
+                            <h1>Heat Map</h1>
                             <div id="map"></div>
                         </div>
                     </div>
@@ -151,7 +135,9 @@
 
     </body>
     <footer>
-        <script src="js/controllers.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/d3/d3.min.js"></script>
+        <script src="js/bundle.js"></script>
         <script src="js/app.js"></script>
     </footer>
 </html>
