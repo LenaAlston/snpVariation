@@ -4,10 +4,10 @@ const bs = require('browser-sync');
 const express = require('express');
 const morgan = require('morgan');
 const pg = require('pg').native;
+const config = require('getconfig');
 
 const app = express();
-const conString = 'postgres://jwxlciuytoiaom:V6CyTfP-tjMhYikxHl-tHWPBUk@ec2-54-235-162-144.compute-1.amazonaws.com:5432/d50gmpmgt0p5b9';
-const client = new pg.Client(conString);
+const client = new pg.Client(config.conString);
 const env = process.argv[2] || 'prod';
 const port = (env == 'dev') ? 2368 : 3000;
 const viewPath = '/app/';

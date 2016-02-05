@@ -1,0 +1,4 @@
+// change filename to default.json and replace string with appropriate data.
+{
+	"conString": "postgres://user:password@host:port/database"
+}
