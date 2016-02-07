@@ -76,6 +76,7 @@
                                 <br>
 
                                 <script>
+                                    var row = [];
                                     var openFile = function(event) {
                                     var input = event.target;
                                         var reader = new FileReader();
@@ -85,8 +86,20 @@
                                           var row = [];                     //create arrays for rows
                                           for(line = 0; line < b.length; line++){   //Loop through all the rows
                                             var chrom = b[line].split(",", 3);    //Get first 3 elements [Chrom#, Start, Stop] 
-                                            row.push(chrom);                //Push Chrom info into row array
-                                       } console.log(row)
+                                            row.push(chrom);  
+                                          }
+                                            //Condense Hotspots
+                                            var allHotspots = [];
+                                            var prev = row[0];
+                                            for (i=0; i <row.length; i++)
+                                            {
+                                              if ((row[i][1] > prev[2]) || (row[i][0] != prev[0])){
+                                                allHotspots.push(prev);
+                                                prev = row[i];
+                                              }
+                                              else
+                                                prev[2] = row[i][2];
+                                            } console.log(allHotspots);                     
                                           };
                                         reader.readAsText(input.files[0]);
                                       };
