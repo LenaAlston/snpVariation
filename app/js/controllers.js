@@ -23,14 +23,14 @@ geneVar.controller('ContentController', function($scope, $http) {
 
 	$scope.chkd = [];
 
-	$scope.African = ['Yoruba', 'BiakaPygmy', 'ASW', 'Mandenka', 'Mbuti pygmy', 'MKK', 'Mozabite', 'San', 'BantuSouthAfrica', 'BantuKenya'];
-	$scope.csAsian = ['Balochi', 'Brahui', 'GIH','Burusho', 'Hazara', 'Kalash', 'Makrani', 'Sindhi', 'Uygur'];
-	$scope.eAsian = ['CEU', 'CHB', 'CHD', 'Dai', 'Han', 'She', 'Japanese', 'JPT+CHB', 'Daur', 'Hezhen', 'Lahu', 'Miao', 'Mongola', 'Naxi', 'Oroqen', 'Tu', 'Tujia', 'Xibo', 'Yakut', 'Yi'];
+	$scope.African = ['Yoruba', 'Beja_H', 'BiakaPygmy', 'Borana', 'Hadza', 'Iraqw', 'Mada', 'Fulani_M','ASW', 'Mandenka', 'Mbuti pygmy', 'MKK', 'Mozabite', 'San', 'BantuSouthAfrica', 'BantuKenya', 'Sandawe', 'Sengwer']; 
+	$scope.csAsian = ['Balochi', 'Bengali', 'Brahui', 'GIH','Burusho', 'Hazara', 'Kalash', 'Makrani', 'Pathan','Sindhi', 'Tamil','Uygur'];  
+	$scope.eAsian = ['Cambodian','CEU', 'CHB', 'CHD', 'Dai', 'Han', 'She', 'Japanese', 'JPT+CHB', 'Daur', 'Hezhen', 'Lahu', 'Miao', 'Mongola', 'Naxi', 'Oroqen', 'Tu', 'Tujia', 'Xibo', 'Yakut', 'Yi'];
 	$scope.wAsian = ['Bedouin', 'Druze', 'Palestinian'];
 	$scope.European = ['Italian', 'TSI', 'Russian', 'French', 'Adygei', 'Basque', 'North Italian', 'Orcadian', 'Tuscan', 'Sardinian'];
 	$scope.naAmerican = ['Maya', 'MEX', 'Colombian', 'Karitiana', 'Pima', 'Surui'];
 	$scope.Oceania = ['Melanesian', 'Papuan'];
-	
+
 	$scope.pops = [
     {cont: 'Africa', pop: $scope.African},
     {cont: 'Central & South Asia', pop: $scope.csAsian},
