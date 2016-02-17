@@ -1,4 +1,107 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var jerzy = require('jerzy');
+
+var geneVar = angular.module('GeneVar', []);
+var selectedPops = [];
+
+geneVar.controller('ContentController', function($scope, $http) {
+
+	$scope.about = {'p1':"GeneVar is a tool that will use regions of interest or hotspots provided as input to identify genomic variations amoung geographically dispersed human populations. This data will be used to make population comparisons at hotspot sites using heat maps and manhattan plots to visualize.", 
+					  'p2': 'Dr. Latifa Jackson, a postdoctoral fellow with National Human Genome Center at Howard University, has found an interest in, and is therefore conducting research on, how clusters of genes in genomic regions on a chromosome may predict disease severity in different dispersed human populations. This research has led Dr. Jackson to build a tool that identifies clusters of single nucleotide polymorphisms (SNPs) on the genome, called hotspots, and reveals significant variations in the SNPs between populations. In 2014, Dr. Jackson worked with Aaron Maleaux, a Howard University undergraduate Computer Science student, to expand the cluster identifying portion of the tool to use a more robust and commonly used programming language and to provide a user interface for the tool to be easily used by colleagues.', 
+				    'p3': 'Through the valuable information Dr. Jackson has learned from the data acquired by Aaron’s project, the next step, and our project, is to compare the genomic regions of populations. The project will identify population variation in specific genomic regions, as identified by the hotspots acquired from Maleaux’s program to make population and individual variant site comparison. Also, Dr. Jackson’s version of the program is on proprietary software, and therefore usability and accessibility of the software is reduced. The new program will provide a more accessible and user friendly data exploration environment for our users at the National Human Genome Center and the Montague Cobb Lab.'}; 
+
+	$scope.usrGuide = {'hotspot':'Navigate GeneVar with ease!', 
+            'infile':'1. Identity your area of interest: Upload the Hotspot File with the start location, stop location, and chromosome number of the area of the genome that peaks your interest most.',
+            'results':'2. Customize your Input: Adjust the areas of the genome that you would care to receive analysis on by adding or removing files from the Hotspot File. Adjust the populations that are most relevant to your interests or projects by checking the continent order boxes next to your populations of interest.',
+            'guide': '3. Reading, interpreting, saving your output result: After your Hotspots are entered and your desired populations are selected, you will be able to view your results in a color coded Heatmap. The lighter the color on your heatmap describes a greater degree of difference between population SNP alleles. The heatmap is downloadable as a PDF with an easy click of the ‘Download’ button.'};
+
+	$scope.resources = {'ds1': '1000 Genome Description',
+						'ds2': 'HapMap Description',
+						'ds3': 'HGDP Description, why file4?',
+						'map' :'Image of Map here'};
+
+	$scope.chkd = [];
+
+	$scope.African = ['Yoruba', 'Beja_H', 'BiakaPygmy', 'Borana', 'Hadza', 'Iraqw', 'Mada', 'Fulani_M','ASW', 'Mandenka', 'Mbuti pygmy', 'MKK', 'Mozabite', 'San', 'BantuSouthAfrica', 'BantuKenya', 'Sandawe', 'Sengwer']; 
+	$scope.csAsian = ['Balochi', 'Bengali', 'Brahui', 'GIH','Burusho', 'Hazara', 'Kalash', 'Makrani', 'Pathan','Sindhi', 'Tamil','Uygur'];  
+	$scope.eAsian = ['Cambodian','CEU', 'CHB', 'CHD', 'Dai', 'Han', 'She', 'Japanese', 'JPT+CHB', 'Daur', 'Hezhen', 'Lahu', 'Miao', 'Mongola', 'Naxi', 'Oroqen', 'Tu', 'Tujia', 'Xibo', 'Yakut', 'Yi'];
+	$scope.wAsian = ['Bedouin', 'Druze', 'Palestinian'];
+	$scope.European = ['Italian', 'TSI', 'Russian', 'French', 'Adygei', 'Basque', 'North Italian', 'Orcadian', 'Tuscan', 'Sardinian'];
+	$scope.naAmerican = ['Maya', 'MEX', 'Colombian', 'Karitiana', 'Pima', 'Surui'];
+	$scope.Oceania = ['Melanesian', 'Papuan'];
+
+	$scope.pops = [
+    {cont: 'Africa', pop: $scope.African},
+    {cont: 'Central & South Asia', pop: $scope.csAsian},
+    {cont: 'Eastern Asia', pop: $scope.eAsian},
+    {cont: 'Europe', pop: $scope.European},
+    {cont: 'Oceania', pop: $scope.Oceania},
+    {cont: 'Native America', pop: $scope.naAmerican},
+    {cont: 'Western Asia', pop: $scope.wAsian}
+  ];
+
+	// select all populations in region?
+ 	$scope.checkAll = function(cont) {
+ 		for(i=0; i < pops.length; i++) {
+ 			check($scope.pops[i].pop);
+		}
+    alert("All checked");
+  };
+
+  // todo: uncheck all populations in region?
+  $scope.uncheckAll = function() {
+  	alert($scope.chkd);
+    $scope.chkd = [];
+  };
+
+   $scope.check = function(name) {
+     if (document.getElementById(name).checked == true) {
+      $scope.chkd.push(name);
+    } else {
+      var i = $scope.chkd.indexOf(name);
+      $scope.chkd.splice(i, 1);
+    }
+    selectedPops = $scope.chkd;
+   };
+
+   $scope.dostuff = function() {
+    selectedPops = $scope.chkd;
+    };
+
+
+ $scope.submit = function() {
+    $http.post('/submit', $scope.chkd)
+   	.success(function(data) {
+      $scope.chkd = []; 
+
+      var len = selectedPops.length;
+      var heatmapData = [];
+      // * optimize later, just get it to work
+      // only need to calculate half the map  
+      // move to server side??
+      for (var x = 0; x < len; x++) {
+        for (var y = 0; y < len; y++) {
+          var xdata = new jerzy.Vector(selectedPops[x]);
+          var ydata = new jerzy.Vector(selectedPops[y]);
+          var ks = new jerzy.Nonparametric.kolmogorovSmirnov(xdata, ydata); 
+          if (isNaN(ks.p))   // *** clean this
+            ks.p = 1;
+            heatmapData.push({xpopulation:selectedPops[x], ypopulation:selectedPops[y], ks:ks.p});
+        }
+      }
+      heatmapChart(selectedPops, heatmapData);
+
+    })
+    .error(function(error) {
+    	console.log('Error: ' + JSON.stringify(error));
+    });
+  }
+});
+
+
+},{"jerzy":2}],2:[function(require,module,exports){
 var vector = require('./lib/vector');
 var factor = require('./lib/factor');
 var matrix = require('./lib/matrix');
@@ -34,7 +137,7 @@ module.exports.Confidence = confidence.Confidence;
 module.exports.Power = power.Power;
 module.exports.Nonparametric = nonparametric.Nonparametric;
 
-},{"./lib/anova":2,"./lib/confidence":3,"./lib/correlation":4,"./lib/distributions":5,"./lib/factor":6,"./lib/matrix":7,"./lib/misc":8,"./lib/nonparametric":9,"./lib/normality":10,"./lib/numeric":11,"./lib/power":12,"./lib/regression":13,"./lib/t":14,"./lib/vector":15}],2:[function(require,module,exports){
+},{"./lib/anova":3,"./lib/confidence":4,"./lib/correlation":5,"./lib/distributions":6,"./lib/factor":7,"./lib/matrix":8,"./lib/misc":9,"./lib/nonparametric":10,"./lib/normality":11,"./lib/numeric":12,"./lib/power":13,"./lib/regression":14,"./lib/t":15,"./lib/vector":16}],3:[function(require,module,exports){
 var vector = require('./vector');
 var distributions = require('./distributions');
 
@@ -83,7 +186,7 @@ Anova.oneway = function(x, y) {
 }
 
 module.exports.Anova = Anova;
-},{"./distributions":5,"./vector":15}],3:[function(require,module,exports){
+},{"./distributions":6,"./vector":16}],4:[function(require,module,exports){
 var distributions = require('./distributions');
 
 Confidence = function() {};
@@ -109,7 +212,7 @@ Confidence.normalLower = function(x, c) {
 };
 
 module.exports.Confidence = Confidence;
-},{"./distributions":5}],4:[function(require,module,exports){
+},{"./distributions":6}],5:[function(require,module,exports){
 var distributions = require('./distributions');
 
 Correlation = function() {};
@@ -133,7 +236,7 @@ Correlation.pearson = function(x, y) {
 };
 
 module.exports.Correlation = Correlation;
-},{"./distributions":5}],5:[function(require,module,exports){
+},{"./distributions":6}],6:[function(require,module,exports){
 var vector = require('./vector');
 var misc = require('./misc');
 var numeric = require('./numeric');
@@ -359,7 +462,7 @@ module.exports.StandardNormal = StandardNormal;
 module.exports.T = T;
 module.exports.F = F;
 module.exports.Kolmogorov = Kolmogorov;
-},{"./misc":8,"./numeric":11,"./vector":15}],6:[function(require,module,exports){
+},{"./misc":9,"./numeric":12,"./vector":16}],7:[function(require,module,exports){
 Factor = function(elements) {
 	this.levels = [];
 	this.factors = [];
@@ -391,7 +494,7 @@ Factor.prototype.groups = function() {
 };
 
 module.exports.Factor = Factor;
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 Matrix = function(elements) {
 	this.elements = elements;
 };
@@ -420,7 +523,7 @@ Matrix.prototype.dot = function(m) {
 };
 
 module.exports.Matrix = Matrix;
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var numeric = require('./numeric');
 
 Misc = function() {};
@@ -510,7 +613,7 @@ Misc.fac = function(n) {
 }
 
 module.exports.Misc = Misc;
-},{"./numeric":11}],9:[function(require,module,exports){
+},{"./numeric":12}],10:[function(require,module,exports){
 var vector = require('./vector');
 var distributions = require('./distributions');
 
@@ -538,7 +641,7 @@ Nonparametric.kolmogorovSmirnov = function(x, y) {
 
 module.exports.Nonparametric = Nonparametric;
 
-},{"./distributions":5,"./vector":15}],10:[function(require,module,exports){
+},{"./distributions":6,"./vector":16}],11:[function(require,module,exports){
 var matrix = require('./matrix');
 var vector = require('./vector');
 var distributions = require('./distributions');
@@ -623,7 +726,7 @@ Normality.shapiroWilk = function(x) {
 };
 
 module.exports.Normality = Normality;
-},{"./distributions":5,"./matrix":7,"./vector":15}],11:[function(require,module,exports){
+},{"./distributions":6,"./matrix":8,"./vector":16}],12:[function(require,module,exports){
 Numeric = function() {};
 
 /*
@@ -689,7 +792,7 @@ Numeric.secant = function(f, a, b, eps) {
 }
 
 module.exports.Numeric = Numeric;
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var distributions = require('./distributions');
 
 Power = function() {};
@@ -705,7 +808,7 @@ Power.sampleSize = function(a, power, sd, effect) {
 
 module.exports.Power = Power;
 
-},{"./distributions":5}],13:[function(require,module,exports){
+},{"./distributions":6}],14:[function(require,module,exports){
 var distributions = require('./distributions');
 
 Regression = function() {};
@@ -765,7 +868,7 @@ Regression.linear = function(x, y) {
 };
 
 module.exports.Regression = Regression;
-},{"./distributions":5}],14:[function(require,module,exports){
+},{"./distributions":6}],15:[function(require,module,exports){
 var vector = require('./vector');
 var distributions = require('./distributions');
 
@@ -810,7 +913,7 @@ StudentT._onesample = function(sample, mu) {
 };
 
 module.exports.StudentT = StudentT;
-},{"./distributions":5,"./vector":15}],15:[function(require,module,exports){
+},{"./distributions":6,"./vector":16}],16:[function(require,module,exports){
 Vector = function(elements) {
 	this.elements = elements;
 };
@@ -1053,107 +1156,4 @@ function Sequence(min, max, step) {
 module.exports.Vector = Vector;
 module.exports.Sequence = Sequence;
 
-},{}],16:[function(require,module,exports){
-'use strict';
-
-var jerzy = require('jerzy');
-
-var geneVar = angular.module('GeneVar', []);
-var selectedPops = [];
-
-geneVar.controller('ContentController', function($scope, $http) {
-
-	$scope.about = {'p1':"GeneVar is a tool that will use regions of interest or hotspots provided as input to identify genomic variations amoung geographically dispersed human populations. This data will be used to make population comparisons at hotspot sites using heat maps and manhattan plots to visualize.", 
-					  'p2': 'Dr. Latifa Jackson, a postdoctoral fellow with National Human Genome Center at Howard University, has found an interest in, and is therefore conducting research on, how clusters of genes in genomic regions on a chromosome may predict disease severity in different dispersed human populations. This research has led Dr. Jackson to build a tool that identifies clusters of single nucleotide polymorphisms (SNPs) on the genome, called hotspots, and reveals significant variations in the SNPs between populations. In 2014, Dr. Jackson worked with Aaron Maleaux, a Howard University undergraduate Computer Science student, to expand the cluster identifying portion of the tool to use a more robust and commonly used programming language and to provide a user interface for the tool to be easily used by colleagues.', 
-				    'p3': 'Through the valuable information Dr. Jackson has learned from the data acquired by Aaron’s project, the next step, and our project, is to compare the genomic regions of populations. The project will identify population variation in specific genomic regions, as identified by the hotspots acquired from Maleaux’s program to make population and individual variant site comparison. Also, Dr. Jackson’s version of the program is on proprietary software, and therefore usability and accessibility of the software is reduced. The new program will provide a more accessible and user friendly data exploration environment for our users at the National Human Genome Center and the Montague Cobb Lab.'}; 
-
-	$scope.usrGuide = {'hotspot':'Navigate GeneVar with ease!', 
-            'infile':'1. Identity your area of interest: Upload the Hotspot File with the start location, stop location, and chromosome number of the area of the genome that peaks your interest most.',
-            'results':'2. Customize your Input: Adjust the areas of the genome that you would care to receive analysis on by adding or removing files from the Hotspot File. Adjust the populations that are most relevant to your interests or projects by checking the continent order boxes next to your populations of interest.',
-            'guide': '3. Reading, interpreting, saving your output result: After your Hotspots are entered and your desired populations are selected, you will be able to view your results in a color coded Heatmap. The lighter the color on your heatmap describes a greater degree of difference between population SNP alleles. The heatmap is downloadable as a PDF with an easy click of the ‘Download’ button.'};
-
-	$scope.resources = {'ds1': '1000 Genome Description',
-						'ds2': 'HapMap Description',
-						'ds3': 'HGDP Description, why file4?',
-						'map' :'Image of Map here'};
-
-	$scope.chkd = [];
-
-	$scope.African = ['Yoruba', 'Beja_H', 'BiakaPygmy', 'Borana', 'Hadza', 'Iraqw', 'Mada', 'Fulani_M','ASW', 'Mandenka', 'Mbuti pygmy', 'MKK', 'Mozabite', 'San', 'BantuSouthAfrica', 'BantuKenya', 'Sandawe', 'Sengwer']; 
-	$scope.csAsian = ['Balochi', 'Bengali', 'Brahui', 'GIH','Burusho', 'Hazara', 'Kalash', 'Makrani', 'Pathan','Sindhi', 'Tamil','Uygur'];  
-	$scope.eAsian = ['Cambodian','CEU', 'CHB', 'CHD', 'Dai', 'Han', 'She', 'Japanese', 'JPT+CHB', 'Daur', 'Hezhen', 'Lahu', 'Miao', 'Mongola', 'Naxi', 'Oroqen', 'Tu', 'Tujia', 'Xibo', 'Yakut', 'Yi'];
-	$scope.wAsian = ['Bedouin', 'Druze', 'Palestinian'];
-	$scope.European = ['Italian', 'TSI', 'Russian', 'French', 'Adygei', 'Basque', 'North Italian', 'Orcadian', 'Tuscan', 'Sardinian'];
-	$scope.naAmerican = ['Maya', 'MEX', 'Colombian', 'Karitiana', 'Pima', 'Surui'];
-	$scope.Oceania = ['Melanesian', 'Papuan'];
-
-	$scope.pops = [
-    {cont: 'Africa', pop: $scope.African},
-    {cont: 'Central & South Asia', pop: $scope.csAsian},
-    {cont: 'Eastern Asia', pop: $scope.eAsian},
-    {cont: 'Europe', pop: $scope.European},
-    {cont: 'Oceania', pop: $scope.Oceania},
-    {cont: 'Native America', pop: $scope.naAmerican},
-    {cont: 'Western Asia', pop: $scope.wAsian}
-  ];
-
-	// select all populations in region?
- 	$scope.checkAll = function(cont) {
- 		for(i=0; i < pops.length; i++) {
- 			check($scope.pops[i].pop);
-		}
-    alert("All checked");
-  };
-
-  // todo: uncheck all populations in region?
-  $scope.uncheckAll = function() {
-  	alert($scope.chkd);
-    $scope.chkd = [];
-  };
-
-   $scope.check = function(name) {
-     if (document.getElementById(name).checked == true) {
-      $scope.chkd.push(name);
-    } else {
-      var i = $scope.chkd.indexOf(name);
-      $scope.chkd.splice(i, 1);
-    }
-    selectedPops = $scope.chkd;
-   };
-
-   $scope.dostuff = function() {
-    selectedPops = $scope.chkd;
-    };
-
-
- $scope.submit = function() {
-    $http.post('/submit', $scope.chkd)
-   	.success(function(data) {
-      $scope.chkd = []; 
-
-      var len = selectedPops.length;
-      var heatmapData = [];
-      // * optimize later, just get it to work
-      // only need to calculate half the map  
-      // move to server side??
-      for (var x = 0; x < len; x++) {
-        for (var y = 0; y < len; y++) {
-          var xdata = new jerzy.Vector(selectedPops[x]);
-          var ydata = new jerzy.Vector(selectedPops[y]);
-          var ks = new jerzy.Nonparametric.kolmogorovSmirnov(xdata, ydata); 
-          if (isNaN(ks.p))   // *** clean this
-            ks.p = 1;
-            heatmapData.push({xpopulation:selectedPops[x], ypopulation:selectedPops[y], ks:ks.p});
-        }
-      }
-      heatmapChart(selectedPops, heatmapData);
-
-    })
-    .error(function(error) {
-    	console.log('Error: ' + JSON.stringify(error));
-    });
-  }
-});
-
-
-},{"jerzy":1}]},{},[16]);
+},{}]},{},[1]);

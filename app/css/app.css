@@ -152,7 +152,7 @@ rect.bordered {
 text.mono {
     font-size: 9pt;
     font-family: Consolas, courier;
-    fill: #aaa;
+    fill: #888;
 }
 
 #map {
