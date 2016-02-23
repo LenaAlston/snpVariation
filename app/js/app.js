@@ -1,4 +1,4 @@
-document.getElementById('in1').addEventListener('change', uploadFile, false);
+// document.getElementById('in1').addEventListener('change', uploadFile, false);
 
 /* App Module */
 function showname() {
@@ -8,33 +8,65 @@ function showname() {
 
 // REMOVE UNUSED FILE READING FUNCTIONS
 
-function uploadFile(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0];
-    if (!f) {
-        alert("Failed to load file");
-    } else if (!f.type.match('text.*/')) {
-        alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
-    } else {
-      var reader = new FileReader();
-        reader.onload = function(e) {
+// function uploadFile(evt) {
+//     //Retrieve the first (and only!) File from the FileList object
+//     var f = evt.target.files[0];
+//     if (!f) {
+//         alert("Failed to load file");
+//     } else if (!f.type.match('text.*/')) {
+//         alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
+//     } else {
+//       var reader = new FileReader();
+//         reader.onload = function(e) {
 
-        var contents = e.target.result;
-        // Verifies receipt of file
-        // Remove later
-          alert( "Received File:\n"
-              +"name: " + f.name + "\n"
-              +"type: " + f.type + "\n"
-              +"size: " + f.size + " bytes\n"
-          );
-        }
-        reader.readAsText(f);
-    }
-}
+//         var contents = e.target.result;
+//         // Verifies receipt of file
+//         // Remove later
+//           alert( "Received File:\n"
+//               +"name: " + f.name + "\n"
+//               +"type: " + f.type + "\n"
+//               +"size: " + f.size + " bytes\n"
+//           );
+//         }
+//         reader.readAsText(f);
+//     }
+// }
+
+
+// function openFile(event) {
+//     var row = [];
+//     var allHotspots = [];
+//     var input = event.target;
+//     var reader = new FileReader();
+//     reader.onload = function(){
+//       var text = reader.result;         //text = File contents  
+//       var b = text.split("\n");         //split File by rows
+//       var row = [];                     //create arrays for rows
+//       for(line = 0; line < b.length; line++){   //Loop through all the rows
+//         var chrom = b[line].split(",", 3);    //Get first 3 elements [Chrom#, Start, Stop] 
+//         row.push(chrom);  
+//       }
+//         // Condense Hotspots
+//         // todo: ignore non-numeric chromosomes
+//         var prev = row[0];
+//         for (i=0; i <row.length; i++)
+//         {
+//           if ((row[i][1] > prev[2]) || (row[i][0] != prev[0])){
+//             allHotspots.push(prev);
+//             prev = row[i];
+//           }
+//           else
+//             prev[2] = row[i][2];
+//         }                     
+//         console.log(JSON.stringify(allHotspots)); 
+//       };
+//     reader.readAsText(input.files[0]);
+//     console.log(JSON.stringify(reader)); 
+//   }
 
 /******************************* Heatmap *****************************************************/
 
-var heatmapChart = function(axes, data) {
+function heatmapChart(axes, data) {
     var margin = { top: 50, left: 130 },
         gridUnit = 80, 
         gridSize = gridUnit * axes.length,
@@ -80,7 +112,6 @@ var heatmapChart = function(axes, data) {
     cards.enter().append("rect")
         .attr("x", function(d) { 
           var pos = axes.indexOf(d.xpopulation);
-          // testing. 
           if (pos == -1) {
             console.log("population not found: ", d.xpopulation);
           }
@@ -127,5 +158,4 @@ var heatmapChart = function(axes, data) {
       .attr("y", gridSize + gridUnit);
     legend.exit().remove();
 
-    console.log()
-};
+}
