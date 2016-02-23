@@ -5,6 +5,7 @@ var jerzy = require('jerzy');
 
 var geneVar = angular.module('GeneVar', []);
 var selectedPops = [];
+var hotspots = [];
 
 geneVar.controller('ContentController', function($scope, $http) {
 
@@ -23,6 +24,7 @@ geneVar.controller('ContentController', function($scope, $http) {
 						'map' :'Image of Map here'};
 
 	$scope.chkd = [];
+  
 
 	$scope.African = ['Yoruba', 'Beja_H', 'BiakaPygmy', 'Borana', 'Hadza', 'Iraqw', 'Mada', 'Fulani_M','ASW', 'Mandenka', 'Mbuti pygmy', 'MKK', 'Mozabite', 'San', 'BantuSouthAfrica', 'BantuKenya', 'Sandawe', 'Sengwer']; 
 	$scope.csAsian = ['Balochi', 'Bengali', 'Brahui', 'GIH','Burusho', 'Hazara', 'Kalash', 'Makrani', 'Pathan','Sindhi', 'Tamil','Uygur'];  
@@ -52,7 +54,7 @@ geneVar.controller('ContentController', function($scope, $http) {
 
   // todo: uncheck all populations in region?
   $scope.uncheckAll = function() {
-  	alert($scope.chkd);
+  	alert("Selected Populations Reset");
     $scope.chkd = [];
   };
 
@@ -71,35 +73,135 @@ geneVar.controller('ContentController', function($scope, $http) {
     };
 
 
+  // $scope.openFile = function(event){
+  //   var row = [];
+  //   var allHotspots = [];
+  //   var input = event.target;
+  //   var reader = new FileReader();
+  //   reader.onload = function(){
+  //     var text = reader.result;         //text = File contents  
+  //     var b = text.split("\n");         //split File by rows
+  //     var row = [];                     //create arrays for rows
+  //     for(line = 0; line < b.length; line++){   //Loop through all the rows
+  //       var chrom = b[line].split(",", 3);    //Get first 3 elements [Chrom#, Start, Stop] 
+  //       row.push(chrom);  
+  //     }
+  //       // Condense Hotspots
+  //       // todo: ignore non-numeric chromosomes
+  //       var prev = row[0];
+  //       for (i=0; i <row.length; i++)
+  //       {
+  //         if ((row[i][1] > prev[2]) || (row[i][0] != prev[0])){
+  //           allHotspots.push(prev);
+  //           prev = row[i];
+  //         }
+  //         else
+  //           prev[2] = row[i][2];
+  //       }                     
+  //       console.log(JSON.stringify(allHotspots)); 
+  //     };
+  //   reader.readAsText(input.files[0]);
+  //   console.log(JSON.stringify(reader)); 
+  // };
+
  $scope.submit = function() {
-    $http.post('/submit', $scope.chkd)
-   	.success(function(data) {
-      $scope.chkd = []; 
+  // console.log(JSON.stringify(hotspots));
+  var request = {'populations':$scope.chkd, 'hotspots':hotspots};
+// make sure to query seperately for each hotspot ************************
+//////////////////////////////////////////////////////
+        
+        // console.log(JSON.stringify(request));
 
-      var len = selectedPops.length;
-      var heatmapData = [];
-      // * optimize later, just get it to work
-      // only need to calculate half the map  
-      // move to server side??
-      for (var x = 0; x < len; x++) {
-        for (var y = 0; y < len; y++) {
-          var xdata = new jerzy.Vector(selectedPops[x]);
-          var ydata = new jerzy.Vector(selectedPops[y]);
-          var ks = new jerzy.Nonparametric.kolmogorovSmirnov(xdata, ydata); 
-          if (isNaN(ks.p))   // *** clean this
-            ks.p = 1;
-            heatmapData.push({xpopulation:selectedPops[x], ypopulation:selectedPops[y], ks:ks.p});
-        }
-      }
-      heatmapChart(selectedPops, heatmapData);
+        $http.post('/submit', request)
+       	.success(function(data) {
+          // console.log(JSON.stringify(data));
+          $scope.chkd = []; 
+          var len = selectedPops.length;
 
-    })
-    .error(function(error) {
-    	console.log('Error: ' + JSON.stringify(error));
-    });
+          var heatmapData = [];
+          // * optimize later, just get it to work
+          // only need to calculate half the map  
+          // move to server side??
+          for (var x = 0; x < len; x++) {
+            for (var y = 0; y < len; y++) {
+              var xdata = new jerzy.Vector(selectedPops[x]);
+              var ydata = new jerzy.Vector(selectedPops[y]);
+              var ks = new jerzy.Nonparametric.kolmogorovSmirnov(xdata, ydata); 
+              if (isNaN(ks.p))   // *** clean this
+                ks.p = 1;
+                heatmapData.push({xpopulation:selectedPops[x], ypopulation:selectedPops[y], ks:ks.p});
+            }
+          }
+
+          heatmapChart(selectedPops, heatmapData);
+
+        })
+        .error(function(error) {
+        	console.log('Error: ' + JSON.stringify(error));
+        });
+    // $scope.chkd = []; 
   }
+
+
+
 });
 
+// var uploadFile = function(evt) {
+//     //Retrieve the first (and only!) File from the FileList object
+//     var f = evt.target.files[0];
+//     if (!f) {
+//         alert("Failed to load file");
+//     } else if (!f.type.match('text.*/')) {
+//         alert(f.name + " is type " + f.type +". This is not an accepted file type.\nPlease select a text file (.txt).");
+//     } else {
+//       var reader = new FileReader();
+//         reader.onload = function(e) {
+//           var contents = e.target.result;
+//           // Verifies receipt of file
+//           // Remove later
+//           alert( "Received File:\n"
+//               +"name: " + f.name + "\n"
+//               +"type: " + f.type + "\n"
+//               +"size: " + f.size + " bytes\n"
+//           );
+//         }
+//         reader.readAsText(f);
+//     }
+// };
+
+function openFile(event) {
+    var row = [];
+    var allHotspots = [];
+    var input = event.target;
+    var reader = new FileReader();
+    reader.onload = function(){
+      var text = reader.result;         //text = File contents  
+      var b = text.split("\n");         //split File by rows
+      var row = [];                     //create arrays for rows
+      for(var line = 0; line < b.length; line++){   //Loop through all the rows
+        var chrom = b[line].split(",", 3);    //Get first 3 elements [Chrom#, Start, Stop] 
+        row.push(chrom);  
+      }
+        // Condense Hotspots
+        // todo: ignore non-numeric chromosomes
+        var prev = row[0];
+        for (var i=0; i <row.length; i++)
+        {
+          if ((row[i][1] > prev[2]) || (row[i][0] != prev[0])){
+            allHotspots.push(prev);
+            prev = row[i];
+          }
+          else
+            prev[2] = row[i][2];
+        }                     
+        // console.log(JSON.stringify(allHotspots)); 
+        hotspots = allHotspots;
+      };
+    reader.readAsText(input.files[0]);
+    // console.log(JSON.stringify(allHotspots)); 
+  }
+
+document.getElementById('in1').addEventListener('change', openFile, false);
 
 },{"jerzy":2}],2:[function(require,module,exports){
 var vector = require('./lib/vector');
